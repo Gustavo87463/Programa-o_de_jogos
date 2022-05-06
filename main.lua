@@ -8,25 +8,32 @@ local h = display.contentHeight
 local campo = display.newImageRect("soccer.png", w, h)
 campo.x, campo.y = w / 2, h / 2
 
-local pessoa = display.newImageRect("people.png", 190/2, 106/2)
-pessoa.x, pessoa.y = w / 2, h * 3/4
-pessoa.name = "pessoa"
-local ball = display.newImageRect("ball.png", 25, 25)
-ball.x, ball.y = w / 2, h / 2
-ball.name = "ball"
+--Sprites
+--Sprite sheet
+local sheetData = {
+    width = 45, --135px, 3 frames, 135/5 = 45
+    height = 63 , --255px, 4 frames, 255/4 = 63
+    numFrames = 12
+}
+local sheet = graphics.newImageSheet("gaara.png", sheetData)
 
-local gols = {}
-gols[1] = display.newRect(w / 2, 10, 90, 1)
-gols[1].name = "golCima"
-gols[2] = display.newRect(w / 2, 475, 90, 1)
-gols[2].name = "golBaixo"
+--aNIMATIONS SEQUENCES
+local sequences = {
+    {name = "paradoBaixo", start = 1, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "paradoEsquerda", start = 4, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "paradoDireita", start = 7, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "paradoCima", start = 10, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "andandoBaixo", start = 2, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'},
+    {name = "andandoEsquerda", start = 5, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'},
+    {name = "andandoDireita", start = 8, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'},
+    {name = "andandoCima", start = 11, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'}
+}
 
-physics.addBody(gols[1], "static")
-physics.addBody(gols[2], "static")
-
-physics.addBody(pessoa, "dynamic", {radius = 25})
-physics.addBody(ball, "dynamic", {radius = 25})
-
+--Sprite object, junta Sprite com animation sequence
+local pessoa = display.newSprite(sheet,sequences)
+pessoa.x = w / 2
+pessoa.y = h / 2
+pessoa:scale(1.5, 1.5)
 
 local botoes = {} -- cria uma lista
 botoes[1] = display.newImageRect("arrow.png", 35, 35) --right
@@ -71,15 +78,6 @@ paredebaixo.name = "paredebaixo"
 local passox, passoy = 0, 0
 local golscima, golBaixo = 0, 0
 
-local options = {
-    text = "0 X 0",
-    x = w / 2,
-    y = -30,
-    font = native.systemFontBold,
-    fontSize = 58
-}
-local placar = display.newText(options)
-placar:setFillColor(0, 1, 0)
 
 local function movimentacao(e)
     if e.phase == "began" or e.phase == "moved" then
@@ -87,23 +85,32 @@ local function movimentacao(e)
         if e.target.name == "right" then    
             --code
             passox = 5
-            pessoa.rotation = 90
+            pessoa:setSequence("andandoDireita")
         elseif e.target.name == "left" then
             --code
             passox = -5
-            pessoa.rotation = 270
+            pessoa:setSequence("andandoEsquerda")
         elseif e.target.name == "up" then
             --code
             passoy = -5
-            pessoa.rotation = 0
+            pessoa:setSequence("andandoCima")
         elseif e.target.name == "down" then
             --code
             passoy = 5
-            pessoa.rotation = 180
+            pessoa:setSequence("andandoBaixo")
         end
     elseif e.phase == "ended" or e.phase == "cancelled" then
         --code
         passox, passoy = 0, 0
+        if e.target.name == "right" then
+            pessoa:setSequence("paradoDireita")
+        elseif e.target.name == "up" then
+            pessoa:setSequence("paradoCima")
+        elseif e.target.name == "left" then
+            pessoa:setSequence("paradoEsquerda")    
+        else
+            pessoa:setSequence("paradoBaixo")
+        end     
     end    
 end        
           
@@ -112,6 +119,7 @@ local function update (e)
     --code update
     pessoa.x = pessoa.x + passox
     pessoa.y = pessoa.y + passoy
+    pessoa:play()
 end
 
 for i=1, #botoes do
@@ -131,9 +139,12 @@ local function marcarGols (e)
     --print(e.object1 .. "colide com" .. e.object2)
 end
 
-Runtime:addEventListener("collision", marcarGols)
-
-
-
+pessoa:setSequence("paradoBaixo")
 
 Runtime:addEventListener("enterFrame", update)
+
+
+
+
+
+
