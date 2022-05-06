@@ -11,29 +11,29 @@ campo.x, campo.y = w / 2, h / 2
 --Sprites
 --Sprite sheet
 local sheetData = {
-    width = 45, --135px, 3 frames, 135/5 = 45
-    height = 63 , --255px, 4 frames, 255/4 = 63
-    numFrames = 12
+    width = 133, --135px, 4 frames, 135/5 = 45
+    height = 199, --255px, 4 frames, 255/4 = 63
+    numFrames = 16
 }
-local sheet = graphics.newImageSheet("gaara.png", sheetData)
+local sheet = graphics.newImageSheet("sprite24.png", sheetData)
 
 --aNIMATIONS SEQUENCES
 local sequences = {
     {name = "paradoBaixo", start = 1, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
-    {name = "paradoEsquerda", start = 4, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
-    {name = "paradoDireita", start = 7, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
-    {name = "paradoCima", start = 10, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
-    {name = "andandoBaixo", start = 2, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'},
-    {name = "andandoEsquerda", start = 5, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'},
-    {name = "andandoDireita", start = 8, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'},
-    {name = "andandoCima", start = 11, count = 2, time = 300, loopCount = 0, loopDirection = 'forward'}
+    {name = "paradoEsquerda", start = 9, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "paradoDireita", start = 13, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "paradoCima", start = 5, count = 1, time = 300, loopCount = 1, loopDirection = 'forward'},
+    {name = "andandoBaixo", start = 2, count = 3, time = 300, loopCount = 0, loopDirection = 'forward'},
+    {name = "andandoEsquerda", start = 10, count = 3, time = 300, loopCount = 0, loopDirection = 'forward'},
+    {name = "andandoDireita", start = 14, count = 3, time = 300, loopCount = 0, loopDirection = 'forward'},
+    {name = "andandoCima", start = 6, count = 3, time = 300, loopCount = 0, loopDirection = 'forward'}
 }
 
 --Sprite object, junta Sprite com animation sequence
 local pessoa = display.newSprite(sheet,sequences)
 pessoa.x = w / 2
 pessoa.y = h / 2
-pessoa:scale(1.5, 1.5)
+pessoa:scale(0.5, 0.5)
 
 local botoes = {} -- cria uma lista
 botoes[1] = display.newImageRect("arrow.png", 35, 35) --right
